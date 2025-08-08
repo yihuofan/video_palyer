@@ -1,5 +1,6 @@
 #include <iostream>
-#include "videoplayer.h"
+#include <stdexcept>
+#include "VideoPlayer.h"
 
 int main(int argc, char *argv[])
 {

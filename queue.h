@@ -5,13 +5,12 @@
 #include <condition_variable>
 #include <atomic>
 
-// FFmpeg headers are needed because the queues store FFmpeg types.
 extern "C"
 {
 #include <libavcodec/avcodec.h>
 }
 
-// 线程安全的Packet队列
+// ---- PacketQueue ----
 struct PacketQueue
 {
     std::queue<AVPacket *> queue;
@@ -76,7 +75,7 @@ struct PacketQueue
     }
 };
 
-// 线程安全的Frame队列
+// ---- FrameQueue ----
 struct FrameQueue
 {
     std::queue<AVFrame *> queue;
@@ -115,16 +114,6 @@ struct FrameQueue
         lock.unlock();
         cond.notify_one();
         return frame;
-    }
-
-    AVFrame *peek()
-    {
-        std::lock_guard<std::mutex> lock(mutex);
-        if (queue.empty())
-        {
-            return nullptr;
-        }
-        return queue.front();
     }
 
     void abort()
